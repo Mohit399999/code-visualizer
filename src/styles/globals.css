@@ -1,0 +1,30 @@
+html,
+body,
+#__next {
+  height: 100%;
+  font-family: 'Nunito', sans-serif;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.MuiTypography-h4 {
+  font-size: 1.9rem;
+}
+
+.MuiTypography-h5 {
+  font-size: 1.4rem;
+}
+
+a {
+  color: #1565c0;
+}
+
+code {
+  font-size: 0.95rem;
+  background-color: #dff4ff;
+  border-radius: 4px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}

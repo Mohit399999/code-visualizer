@@ -1,0 +1,47 @@
+module.exports = () => {
+  const txy = (id, x, y) => {
+    const el = document.querySelector(id);
+    if (el !== null) {
+      if (x !== null) el.dataset.tx = x;
+      if (y !== null) el.dataset.ty = y;
+    }
+    return Promise.resolve();
+  };
+
+  const tx = (id, x) => txy(id, x, null);
+  const ty = (id, y) => txy(id, null, y);
+
+  const bgcolor = (id, color) => {
+    const el = document.querySelector(id);
+    if (el !== null) {
+      el.style.backgroundColor = color;
+    }
+    return Promise.resolve();
+  };
+
+  const animate = () => Promise.resolve();
+
+  const cleanup = (node, dx, dy) => {
+    if (node) {
+        node.update({ x: node.x + dx, y: node.y - dy });
+        txy(node.id, node.x, node.y);
+        if (node.parent) {
+            const { x, y } = node;
+            txy(node.eid, x + 25, y + 20);
+        }
+        cleanup(node.left, dx, dy);
+        cleanup(node.right, dx, dy);
+    }
+  };
+
+  const scope = {
+    current: {
+      querySelector: (query) => {
+        return document.querySelector(query);
+      },
+      getBoundingClientRect: () => ({ width: 700, height: 500 }),
+    },
+  };
+
+  return [null, { scope, txy, tx, ty, bgcolor, animate, cleanup }];
+};

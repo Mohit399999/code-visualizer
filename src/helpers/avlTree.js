@@ -1,0 +1,108 @@
+import binarySearchTree from './searchTree';
+import { Colors } from '../common/constants';
+
+const delay = 500;
+
+function avlTree(animator, setCurrentStep) {
+    const Tree = binarySearchTree(animator);
+    const { bgcolor, scope } = animator;
+
+    const height = (node) => (node ? node.height : -1);
+
+    const balanceFactor = (node) => {
+        return height(node.left) - height(node.right);
+    };
+
+    const updateHeight = (node) => {
+        const h = 1 + Math.max(height(node.left), height(node.right));
+        node.update({ height: h });
+        const el = scope.current.querySelector(`.tag${node.key}`);
+        el.textContent = balanceFactor(node);
+    };
+
+    function* rotateRight(node) {
+        const left = node.left;
+        Tree.rotateRight(node);
+        yield delay * 2;
+        updateHeight(node);
+        updateHeight(left);
+        yield delay;
+    }
+
+    function* rotateLeft(node) {
+        const right = node.right;
+        Tree.rotateLeft(node);
+        yield delay * 2;
+        updateHeight(node);
+        updateHeight(right);
+        yield delay;
+    }
+
+    async function* rebalance(node) {
+        if (!node) return;
+        bgcolor(node.id, Colors.compare);
+        setCurrentStep('1,2');
+        yield delay;
+        updateHeight(node);
+        yield delay;
+        const nodeBf = balanceFactor(node);
+        if (nodeBf > 1) {
+            const childBf = balanceFactor(node.left);
+            if (childBf >= 0) {
+                setCurrentStep('5');
+                yield* rotateRight(node);
+            } else {
+                setCurrentStep('7');
+                yield* rotateLeft(node.left);
+                setCurrentStep('8');
+                yield* rotateRight(node.refresh());
+            }
+        } else if (nodeBf < -1) {
+            const childBf = balanceFactor(node.right);
+            if (childBf <= 0) {
+                setCurrentStep('11');
+                yield* rotateLeft(node);
+            } else {
+                setCurrentStep('13');
+                yield* rotateRight(node.right);
+                setCurrentStep('14');
+                yield* rotateLeft(node.refresh());
+            }
+        }
+        setCurrentStep('');
+        await bgcolor(node.id, Colors.white);
+        yield delay;
+        yield* rebalance(node.parent);
+    }
+
+    const backtrack = (node) => {
+        if (node) {
+            updateHeight(node);
+            backtrack(node.parent);
+        }
+    };
+
+    return Object.freeze({
+        ...Tree,
+        _insert(num, _node) {
+            const node = Tree._insert(num, _node);
+            backtrack(node);
+        },
+        async *insert(num) {
+            const node = yield* Tree.insert(num);
+            node.update({ height: 0 });
+            const el = scope.current.querySelector(`.tag${node.key}`);
+            el.innerText = 0;
+            yield delay * 2;
+            yield* rebalance(node.parent);
+        },
+        async *deleteNode(num) {
+            const affected = yield* Tree.deleteNode(num);
+            yield delay * 2;
+            yield* rebalance(affected);
+            return affected;
+        },
+    });
+}
+
+export default avlTree;

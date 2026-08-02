@@ -1,0 +1,157 @@
+import db, { checkLastComments } from '@/lib/firebase-utils';
+import {
+  withAuth,
+  withDocument,
+  withOptionalAuth,
+  withQueryParams,
+  withRequestBody,
+} from '@/lib/middlewares';
+import { hasProfanity } from '@/lib/profanity';
+import { FieldValue } from 'firebase-admin/firestore';
+import compose from 'ramda/src/compose';
+
+const COMMENTS = 'comments';
+
+export default async function (req, res) {
+  const handlers = {
+    GET: compose(withOptionalAuth, withQueryParams('pageId'))(handleGet),
+    POST: compose(withAuth, withRequestBody('pageId', 'comment'))(handlePost),
+    DELETE: compose(
+      withAuth,
+      withQueryParams('id'),
+      withDocument('comments'),
+    )(handleDelete),
+    PATCH: compose(
+      withAuth,
+      withQueryParams('id', 'action'),
+      withDocument('comments'),
+    )(handlePatch),
+  };
+
+  try {
+    if (handlers[req.method]) {
+      await handlers[req.method](req, res);
+    } else {
+      res.status(405).send('Method not allowed');
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Internal server error');
+  }
+}
+
+function buildQuery(pageId) {
+  const query = db
+    .collection(COMMENTS)
+    .where('pageId', '==', pageId)
+    .where('deleted', '==', false);
+
+  return query.orderBy('upvotes', 'desc').orderBy('createdAt', 'desc');
+}
+
+async function handleGet(req, res, user) {
+  const { pageId } = req.query;
+  const query = buildQuery(pageId).limit(50);
+  const snapshot = await query.get();
+  const comments = snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      isAuthor: user && data.authorId === user.userId,
+      upvoted: user && data.upvotedBy.includes(user.email),
+      ...data,
+    };
+  });
+  res.status(200).json(comments);
+}
+
+async function handlePost(req, res, user) {
+  const { pageId, comment } = req.body;
+  const text = comment.trim();
+
+  if (text.length > 1000) {
+    return res.status(400).send('Comment must be under 1000 characters.');
+  }
+  if (hasProfanity(text)) {
+    return res.status(400).send('Your comment contains inappropriate words.');
+  }
+  const allowed = await checkLastComments(user.userId);
+  if (!allowed) {
+    return res.status(429).send('Too many comments. Please wait a minute.');
+  }
+
+  const authorInfo = {
+    authorId: user.userId,
+    authorName: user.name,
+    authorEmail: user.email,
+    authorImage: user.image,
+  };
+  const comments = db.collection(COMMENTS);
+  const docRef = await comments.add({
+    text,
+    pageId,
+    upvotes: 0,
+    upvotedBy: [],
+    reportedBy: [],
+    deleted: false,
+    createdAt: new Date().toISOString(),
+    ...authorInfo,
+  });
+
+  res.status(201).json({
+    id: docRef.id,
+    text,
+    isAuthor: true,
+    upvoted: false,
+    upvotes: 0,
+    createdAt: new Date().toISOString(),
+    ...authorInfo,
+  });
+}
+
+async function handleDelete(req, res, user, doc) {
+  const { userId, isAdmin } = user;
+  const { authorId } = doc.data();
+
+  if (authorId !== userId && !isAdmin) {
+    return res.status(403).send('User forbidden');
+  }
+  await doc.ref.update({ deleted: true });
+  res.status(200).send('success');
+}
+
+async function handlePatch(req, res, { email }, doc) {
+  const { action } = req.query;
+  const { upvotedBy, reportedBy } = doc.data();
+
+  switch (action) {
+    case 'upvote': {
+      if (upvotedBy.includes(email)) {
+        await doc.ref.update({
+          upvotes: FieldValue.increment(-1),
+          upvotedBy: FieldValue.arrayRemove(email),
+        });
+      } else {
+        await doc.ref.update({
+          upvotes: FieldValue.increment(1),
+          upvotedBy: FieldValue.arrayUnion(email),
+        });
+      }
+      res.status(200).send('success');
+      break;
+    }
+    case 'report': {
+      if (reportedBy.includes(email)) {
+        return res.status(400).send('Already reported');
+      }
+      await doc.ref.update({
+        reportedBy: FieldValue.arrayUnion(email),
+        deleted: reportedBy.length >= 3,
+      });
+      res.status(200).send('success');
+      break;
+    }
+    default:
+      res.status(400).send('Invalid action');
+  }
+}

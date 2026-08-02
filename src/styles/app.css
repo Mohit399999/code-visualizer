@@ -1,0 +1,176 @@
+:root {
+    --header-height: 60px;
+    --layout-height: calc(100% - 60px);
+    --thin-border: thin solid #e5e5e5;
+}
+
+.contentRow {
+    height: var(--layout-height);
+    flex-wrap: nowrap;
+}
+
+.content {
+    min-height: 100%;
+    width: fit-content;
+    padding: 2rem;
+    background-color: #f8fbff;
+    position: relative;
+    overflow: auto;
+}
+
+.content > p,
+.content section {
+    width: calc(100vw - 4rem);
+}
+
+.content > p {
+    text-align: justify;
+}
+
+@media (min-width: 900px) {
+    .content {
+        padding: 2.5rem;
+    }
+
+    .content > p,
+    .content section {
+        width: auto;
+    }
+}
+
+.drawer {
+    top: var(--header-height) !important;
+    height: var(--layout-height);
+}
+
+.drawer .paper,
+.drawer .backdrop {
+    top: var(--header-height) !important;
+    height: var(--layout-height);
+}
+
+.sorting {
+    height: 200px;
+    position: relative;
+}
+
+.heapSort,
+.mergeSort,
+.radixSort {
+    position: relative;
+    min-height: 300px;
+}
+
+.huffmanTree {
+    position: relative;
+    height: 500px;
+}
+
+.alphaGrid {
+    display: flex;
+    min-height: 40px;
+}
+
+.alphaGrid .cell {
+    width: 44px;
+    height: 40px;
+    margin-right: 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    color: #404040;
+}
+
+.numGrid .cell {
+    width: 52px;
+    height: 42px;
+}
+
+.drawGraph {
+    width: max-content;
+    height: max-content;
+}
+
+.resizable {
+    min-width: 700px;
+    min-height: 500px;
+    width: 700px;
+    height: 500px;
+    border-radius: 8px;
+    resize: both;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #e5e5e5;
+}
+
+.pseudoCode {
+    padding: 8px 0;
+    font-size: 0.9rem;
+    background-color: #efefef;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.pseudoCode pre {
+    margin: 8px 0;
+    padding: 4px 24px;
+}
+
+.currentStep {
+    background-color: orange;
+}
+
+.cost {
+    width: 32px;
+    height: 24px;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: 0.95rem;
+}
+
+.cost:focus {
+    background: lightblue;
+    outline: none;
+}
+
+.dfs-path .cell,
+.bfs-path .cell {
+    background-color: #ffd580;
+}
+
+.ham-path .cell,
+.top-sort .cell {
+    background-color: orange;
+}
+
+.watermark {
+    position: absolute;
+    margin-top: -50px !important;
+    right: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+}
+
+.watermark:hover {
+    color: #1976d2;
+    border-color: #1976d2;
+    background: white;
+}
+
+.savedDataBtn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  gap: 8px;
+  text-transform: none;
+  font-size: 1rem;
+}

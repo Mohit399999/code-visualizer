@@ -1,0 +1,138 @@
+import {
+  Box,
+  IconButton,
+  Popover,
+  Stack,
+  Switch,
+  Typography,
+} from '@mui/material';
+import { useContext, useRef, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { logError } from '@/common/utils';
+import { marked } from 'marked';
+import { InfoOutlined } from '@mui/icons-material';
+import AppContext from '@/common/context';
+import useFeedback from './useFeedback';
+import useCredits from './useCredits';
+import { SUMMARY_COST } from '@/lib/constants';
+
+export default function useSummary() {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [content, setContent] = useState('');
+  const [summaryOn, setSummaryOn] = useState(false);
+  const { asPath, pathname, push } = useRouter();
+  const { data: session } = useSession();
+  const { fetchCredits } = useCredits();
+  const { playStatus } = useContext(AppContext);
+  const controlRef = useRef(null);
+  const algoId = pathname.split('/')[2];
+
+  const [feedback, setFeedback] = useFeedback({
+    api: '/api/summary-feedback',
+    pageId: algoId,
+  });
+
+  const explain = async (data) => {
+    if (!summaryOn) return;
+    const controller = new AbortController();
+    controlRef.current?.abort();
+    controlRef.current = controller;
+    setContent('<p>Thinking...</p>');
+    setFeedback(null);
+    try {
+      const res = await fetch('/api/summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data, algoId }),
+        signal: controller.signal,
+      });
+
+      if (res.ok) {
+        const html = marked(await res.text());
+        setContent(html);
+        fetchCredits();
+      } else if (res.status === 403) {
+        setContent(
+          '<p>Insufficient credits. Please <a href="/buy-credits">buy more credits</a> to continue using AI.</p>'
+        );
+      } else if (res.status === 504) {
+        setContent('<p>AI request timed out.</p>');
+      } else {
+        setContent('<p>AI service is busy. Please try again.</p>');
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        setContent('<p>Something went wrong. Please try again.</p>');
+      }
+      logError(err, 'AI request cancelled');
+    }
+  };
+
+  const toggle = (e) => {
+    if (!session) {
+      push(`/auth/signin?callbackUrl=${encodeURIComponent(asPath)}`);
+    } else {
+      const { checked } = e.target;
+      setSummaryOn(checked);
+      window.gtag?.('event', 'ai_summary', { checked });
+      if (!checked) abort();
+    }
+  };
+
+  const abort = () => {
+    controlRef.current?.abort();
+    if (playStatus < 2) setContent('');
+    setFeedback(null);
+  };
+
+  const summary = (
+    <Stack minHeight={200}>
+      <Box display="flex" alignItems="center" gap={1}>
+        <Typography variant="h6" component="h2">
+          AI Summary
+        </Typography>
+        <IconButton
+          size="small"
+          onClick={(e) => setAnchorEl(e.currentTarget)}
+          aria-label="AI summary info"
+          sx={{ p: 0 }}
+        >
+          <InfoOutlined fontSize="small" color="warning" />
+        </IconButton>
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={() => setAnchorEl(null)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          slotProps={{
+            paper: { sx: { mt: 1, borderRadius: 2 } },
+          }}
+        >
+          <Typography sx={{ px: 1.5, py: 1 }} variant="body2">
+            Get an AI-powered explanation tailored to this visualization.
+            Accuracy may vary.
+          </Typography>
+        </Popover>
+        <Switch
+          size="small"
+          checked={summaryOn}
+          onChange={toggle}
+          inputProps={{ 'aria-label': 'AI Summary Toggle' }}
+        />
+        <Typography variant="body2">
+          ({SUMMARY_COST[algoId] || 3} credits)
+        </Typography>
+      </Box>
+      <Typography
+        variant="body2"
+        width={500}
+        lineHeight={1.6}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+      {content.length > 200 && feedback}
+    </Stack>
+  );
+
+  return [summary, explain, abort];
+}

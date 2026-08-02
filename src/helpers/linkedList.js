@@ -1,0 +1,121 @@
+import { showError, sleep, sound } from '../common/utils';
+import { Colors } from '../common/constants';
+import $ from 'jquery';
+
+const STEP_SIZE = 60 + 30;
+const NODE_TOP = 80;
+const EDGE_TOP = 98;
+const EDGE_WIDTH = 40;
+
+const delay = 500;
+const dur = { duration: 0.5 };
+
+const arrowStyle = {
+  borderTopColor: '#555',
+  transform: 'rotate(-90deg)',
+  left: 'unset',
+  right: -2, // arrow offset
+};
+
+function linkedList({ tx, ty, txy, bgcolor, animate }) {
+  const head = { key: 0 };
+  const arr = [head];
+
+  const length = (node) => (node ? 1 + length(node.next) : -1);
+
+  const insertAtHead = (value) => {
+    if (!head.next) return insertAtTail(value);
+    return insertAt(value, 0);
+  };
+
+  const insertAtTail = async (value) => {
+    const node = await findNode((a) => !a.next);
+    const key = arr.length;
+    const eid = `.edge${key - 1}`;
+    node.next = { value, key, eid, prev: node };
+    arr.push(node.next);
+    sound('pop');
+    const nodeX = length(head) * STEP_SIZE;
+    txy(`#box${key}`, nodeX, NODE_TOP);
+    await txy(eid, nodeX - EDGE_WIDTH, EDGE_TOP);
+    $(`.arrow${key - 1}`).css(arrowStyle);
+    animate(eid, { opacity: 1 });
+  };
+
+  const findNode = async (predicate) => {
+    let node = head, vi = 0;
+    while (node) {
+      await bgcolor(`#next${node.key}`, Colors.visited);
+      await sleep(delay);
+      await bgcolor(`#next${node.key}`, Colors.white);
+      if (predicate(node, vi)) break;
+      node = node.next;
+      vi++;
+    }
+    return node;
+  };
+
+  const insertAt = async (value, k) => {
+    if (k === length(head)) return insertAtTail(value);
+
+    if (k > length(head) || k < 0) {
+      showError('Index is out of bounds.');
+      return true;
+    }
+    const prev = await findNode((_, i) => i === k);
+    if (k > 0) sound('swap');
+    const key = arr.length;
+    const eid = `.edge${key - 1}`;
+    await tx(`#box${key}`, k * STEP_SIZE);
+    await txy(eid, k * STEP_SIZE + 30, 80);
+    animate(eid, { rotate: -90 }, dur);
+    animate(eid, { opacity: 1 });
+    $(`.arrow${key - 1}`).css(arrowStyle);
+    const next = prev.next;
+    animate(next.eid, { rotate: 45, width: 55 }, dur);
+    ty(next.eid, 40);
+    await sleep(delay * 2);
+    sound('swap');
+    shiftNodes(prev, k + 2);
+    const nodeX = (k + 1) * STEP_SIZE;
+    txy(`#box${key}`, nodeX, NODE_TOP);
+    txy(eid, nodeX - EDGE_WIDTH, EDGE_TOP);
+    animate(eid, { rotate: 0 }, dur);
+    animate(next.eid, { rotate: 0, width: EDGE_WIDTH }, dur);
+    ty(next.eid, EDGE_TOP);
+    const newNode = { value, key, eid, prev };
+    newNode.next = prev.next;
+    prev.next = newNode;
+    arr.push(newNode);
+  };
+
+  const shiftNodes = (node, vi) => {
+    let cur = node.next;
+    while (cur) {
+      const shiftX = vi * STEP_SIZE;
+      tx(`#box${cur.key}`, shiftX);
+      tx(cur.eid, shiftX - EDGE_WIDTH);
+      cur = cur.next;
+      vi++;
+    }
+  };
+
+  const deleteAt = async (k) => {
+    if (k >= length(head) || k < 0) {
+      showError('Index is out of bounds.');
+      return;
+    }
+    const node = await findNode((_, i) => i - 1 === k);
+    animate(`#box${node.key}`, { opacity: 0 });
+    animate(node.eid, { opacity: 0 });
+    await sleep(delay);
+    if (node.next) sound('swap');
+    shiftNodes(node, k + 1);
+    node.prev.next = node.next;
+    if (node.next) node.next.prev = node.prev;
+  };
+
+  return { insertAtHead, insertAtTail, insertAt, deleteAt };
+}
+
+export default linkedList;

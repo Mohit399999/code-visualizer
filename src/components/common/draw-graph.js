@@ -1,0 +1,235 @@
+import { useState, useContext, memo } from 'react';
+import { useGraphControls, useSavedData } from '@/hooks';
+import { useRouter } from 'next/router';
+import { showToast } from '../toast';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
+import {
+  PlayArrow,
+  Pause,
+  Refresh,
+  Share,
+  Undo,
+  Redo,
+  Save,
+} from '@mui/icons-material';
+import styles from '@/styles/draw-graph.module.css';
+import SavedDataList from '@/components/common/saved-data';
+import AppContext from '@/common/context';
+import Graph from '@/common/graph';
+
+function DrawGraph({
+  weighted = false,
+  allowDirected = true,
+  customSource = true,
+  isDAG = false,
+  scope,
+  scopes = [scope],
+  ...props
+}) {
+  const { isDirGraph, playStatus } = useContext(AppContext);
+  const { saveData, ...rest } = useSavedData();
+  const { pathname } = useRouter();
+  const [source, setSource] = useState('A');
+
+  const algoId = pathname.split('/')[2];
+  const isEmbed = pathname.includes('/embed/');
+
+  const config = {
+    source,
+    weighted,
+    acyclic: algoId === 'TopSort',
+    directed: algoId === 'TopSort' || (isDirGraph && allowDirected),
+    scope: scopes[0],
+  };
+
+  const {
+    handlePlay,
+    handleClear,
+    handleUndo,
+    handleRedo,
+    canUndo,
+    canRedo,
+    refresh,
+    loadSavedGraph,
+    setDirected,
+  } = useGraphControls(config, { scopes, ...props });
+
+  const handleCopy = () => {
+    const weights = weighted ? scopes[0].costMatrix() : undefined;
+    const json = JSON.stringify(Graph.skeleton(weights));
+    const pageId = location.pathname.split('/').pop();
+    const url = `${location.origin}/graph/embed/${pageId}?skeleton=${btoa(json)}`;
+    navigator.clipboard.writeText(url);
+    showToast({
+      message: 'Graph url is copied to clipboard.',
+      variant: 'success',
+    });
+  };
+
+  const handleSave = () => {
+    if (Graph.totalPoints() <= 1) {
+      showToast({ message: 'Nothing to save.', variant: 'warning' });
+      return;
+    }
+    const weights = weighted ? scopes[0].costMatrix() : undefined;
+    saveData(Graph.skeleton(weights));
+  };
+
+  return (
+    <Box className="drawGraph" aria-label="Graph controls and visualization">
+      <Box mb={1} px={0.5} className={styles.toolbar}>
+        <Typography variant="h6" mr="auto">
+          Draw Graph
+        </Typography>
+
+        <Box className={styles.buttonGroup}>
+          <IconButton
+            onClick={refresh}
+            color="primary"
+            title="New Graph"
+            aria-label="New Graph"
+          >
+            <Refresh sx={{ fontSize: 28 }} />
+          </IconButton>
+
+          {allowDirected && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isDirGraph}
+                  onChange={setDirected}
+                  name="directed"
+                  disabled={playStatus !== 0}
+                  color="primary"
+                />
+              }
+              label="Directed"
+              sx={{ mr: 0.5 }}
+            />
+          )}
+
+          {customSource && (
+            <TextField
+              value={source}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSource(value.charAt(0).toUpperCase());
+              }}
+              className={styles.source}
+              label="Src"
+              variant="outlined"
+              size="small"
+              InputProps={{ sx: { height: 35 } }}
+              sx={{ maxWidth: '60px', mr: 0.5 }}
+            />
+          )}
+
+          <Button
+            size="small"
+            variant="contained"
+            onClick={handlePlay}
+            disabled={Boolean(isDAG && playStatus)}
+            title={playStatus === 1 ? 'Pause' : 'Play'}
+            aria-live="polite"
+            sx={{ minWidth: '40px', px: 1 }}
+          >
+            {playStatus === 1 ? <Pause /> : <PlayArrow />}
+          </Button>
+
+          <Button
+            variant="outlined"
+            onClick={handleClear}
+            sx={{ minWidth: '70px', py: 0.5 }}
+          >
+            CLEAR
+          </Button>
+
+          <Button
+            onClick={handleUndo}
+            variant="outlined"
+            disabled={!canUndo}
+            title="Undo"
+            aria-label="Undo"
+            sx={{ p: 0.5, minWidth: 40 }}
+          >
+            <Undo />
+          </Button>
+
+          <Button
+            onClick={handleRedo}
+            variant="outlined"
+            disabled={!canRedo}
+            title="Redo"
+            aria-label="Redo"
+            sx={{ p: 0.5, minWidth: 40 }}
+          >
+            <Redo />
+          </Button>
+
+          {!isEmbed && (
+            <IconButton
+              onClick={handleSave}
+              color="primary"
+              title="Save Graph"
+              aria-label="Save Graph"
+              sx={{ p: 0 }}
+            >
+              <Save sx={{ fontSize: 32 }} />
+            </IconButton>
+          )}
+
+          <IconButton
+            onClick={handleCopy}
+            color="primary"
+            title="Share Graph"
+            aria-label="Share Graph"
+            sx={{ p: 0 }}
+          >
+            <Share sx={{ fontSize: 28 }} />
+          </IconButton>
+        </Box>
+      </Box>
+
+      <Paper className="resizable" sx={{ mb: 1 }}>
+        <Plane />
+      </Paper>
+
+      {!isEmbed && <SavedDataList onSelect={loadSavedGraph} {...rest} />}
+    </Box>
+  );
+}
+
+export const Plane = memo(function () {
+  return (
+    <svg
+      className="plane"
+      style={{ width: '100%', height: '100%' }}
+      role="graphics-document"
+    >
+      <defs>
+        <marker
+          id="arrow"
+          viewBox="0 0 10 10"
+          refX="5"
+          refY="5"
+          markerWidth="4"
+          markerHeight="4"
+          orient="auto-start-reverse"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#555" />
+        </marker>
+      </defs>
+    </svg>
+  );
+});
+
+export default DrawGraph;

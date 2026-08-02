@@ -1,0 +1,103 @@
+import { Divider, Typography } from '@mui/material';
+import Graph, { Points } from '@/common/graph';
+import AddPoints from '@/components/convex-hull/add-points';
+import { useGraphScope } from '@/hooks';
+import { svgElement } from '@/common/utils';
+import { addPoints } from '@/helpers/convexHull';
+import { Colors } from '@/common/constants';
+
+export default function ConvexHull(props) {
+  const [scope, graphRef] = useGraphScope();
+
+  return (
+    <>
+      <Typography paragraph>
+        A <strong>Convex Hull</strong> is the smallest convex polygon that
+        encloses a given set of points. It is a fundamental concept in
+        computational geometry with applications in collision detection, image
+        processing, and pattern recognition. The algorithm visualized here is
+        the <strong>Jarvis March</strong> or <strong>Gift Wrapping</strong>{' '}
+        algorithm, which finds the convex hull by iteratively wrapping a
+        {"'gift'"} around the set of points.
+      </Typography>
+
+      <Typography paragraph>
+        The Jarvis March algorithm starts by finding the leftmost point and then
+        iteratively wrapping a {"'gift'"} around the set of points. It uses the
+        orientation of three points to determine if a point is inside or outside
+        the hull. If a point is outside the hull, it is added to the hull and
+        the next point is selected. This process continues until the hull is
+        complete.
+      </Typography>
+      <Divider sx={{ my: 3 }} />
+
+      <AddPoints
+        {...props}
+        scope={scope}
+        graphRef={graphRef}
+        onStart={Visualizer(scope)}
+      />
+    </>
+  );
+}
+
+const delay = 500;
+
+function Visualizer(scope) {
+  var cvx, left, p, q;
+
+  async function* start() {
+    cvx = [];
+    left = 0;
+    for (let i = 1; i < Graph.totalPoints(); i++) {
+      const x1 = Graph.point(i).x;
+      const x2 = Graph.point(left).x;
+      if (x1 < x2) left = i;
+    }
+    p = left;
+    yield delay;
+    yield* convexHull();
+  }
+
+  async function* convexHull() {
+    cvx.push(p);
+    scope.node(p).attr('fill', Colors.visited);
+    scope.node(p).attr('stroke', Colors.visited);
+    q = (p + 1) % Graph.totalPoints();
+    yield delay;
+    yield* next(0);
+  }
+
+  async function* next(i) {
+    if (i < Graph.totalPoints()) {
+      const seg = [p, q].map(Graph.point);
+      const ori = Points.orientation(...seg, Graph.point(i));
+      if (ori === 1) {
+        q = i;
+        connect(Colors.stroke);
+        yield delay;
+        scope.path(':last').remove();
+      }
+      yield* next(i + 1);
+    } else {
+      connect(Colors.visited);
+      p = q;
+      p !== left ? yield* convexHull() : addPoints(cvx, scope);
+    }
+  }
+
+  function connect(color) {
+    const u = Graph.point(p);
+    const v = Graph.point(q);
+    const props = {
+      class: 'edge',
+      d: `M${u.x} ${u.y} L${v.x} ${v.y}`,
+      stroke: color,
+      'stroke-width': 2,
+    };
+    const edge = svgElement('path', props);
+    scope.node(':first').before(edge);
+  }
+
+  return start;
+}

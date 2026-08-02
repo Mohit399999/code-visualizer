@@ -1,0 +1,73 @@
+.inputNumbers {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    z-index: 11;
+}
+
+.inputNumbers .number {
+    width: 2.5rem;
+    margin-right: 0.5rem;
+}
+
+.inputNumbers .select {
+    width: 4rem;
+    border-radius: 6px;
+}
+
+.numbox {
+    width: 50px;
+    height: 40px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    background-color: white;
+}
+
+.node {
+    width: 42px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    position: absolute;
+}
+
+.edge {
+    height: 2px;
+    position: absolute;
+    transform-origin: 0 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+}
+
+.node span {
+    position: absolute;
+    right: -18px;
+    top: -14px;
+    background: #9acd32;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 8px solid transparent;
+  position: absolute;
+  bottom: -3px;
+  left: 35px;
+  transform: translateX(-150%) rotate(90deg);
+}
