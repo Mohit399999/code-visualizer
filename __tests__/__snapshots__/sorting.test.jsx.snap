@@ -42,6 +42,20 @@ exports[`Insertion sort visualization renders in correct order after animation 1
 ]
 `;
 
+exports[`Insertion sort visualization renders in correct order after animation 2`] = `
+[
+  "{"tx":"180"}",
+  "{"ty":"0","tx":"0"}",
+  "{"ty":"0","tx":"360"}",
+  "{"ty":"0","tx":"120"}",
+  "{"ty":"0","tx":"480"}",
+  "{"ty":"0","tx":"60"}",
+  "{"ty":"0","tx":"300"}",
+  "{"ty":"0","tx":"420"}",
+  "{"ty":"0","tx":"240"}",
+]
+`;
+
 exports[`Merge sort visualization renders in correct order after animation 1`] = `
 [
   "{"ty":"0","tx":"180"}",
