@@ -1,102 +1,102 @@
 export const defaultSeoConfig = {
-  title: 'See Algorithms - Interactive Algorithm Visualizations',
+  title: "code vizualizer",
   description:
-    'Learn algorithms through interactive visualizations. Step-by-step animations for sorting, searching, graph algorithms, and data structures. Perfect for students and educators.',
-  canonical: 'https://see-algorithms.com',
+    "Learn algorithms through interactive visualizations. Step-by-step animations for sorting, searching, graph algorithms, and data structures. Perfect for students and educators.",
+  canonical: "https://see-algorithms.com",
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://see-algorithms.com',
-    siteName: 'See Algorithms',
-    title: 'See Algorithms - Interactive Algorithm Visualizations',
+    type: "website",
+    locale: "en_US",
+    url: "https://see-algorithms.com",
+    siteName: "See Algorithms",
+    title: "See Algorithms - Interactive Algorithm Visualizations",
     description:
-      'Learn algorithms through interactive visualizations. Step-by-step animations for sorting, searching, graph algorithms, and data structures.',
+      "Learn algorithms through interactive visualizations. Step-by-step animations for sorting, searching, graph algorithms, and data structures.",
     images: [
       {
-        url: 'https://see-algorithms.com/og-image.png',
+        url: "https://see-algorithms.com/og-image.png",
         width: 1400,
         height: 720,
-        alt: 'See Algorithms Visualization',
+        alt: "See Algorithms Visualization",
       },
     ],
   },
   additionalMetaTags: [
     {
-      name: 'keywords',
+      name: "keywords",
       content:
-        'algorithms, visualization, sorting, data structures, computer science, programming, education, interactive learning, binary search tree, graph algorithms',
+        "algorithms, visualization, sorting, data structures, computer science, programming, education, interactive learning, binary search tree, graph algorithms",
     },
     {
-      name: 'author',
-      content: 'See Algorithms',
+      name: "author",
+      content: "See Algorithms",
     },
     {
-      property: 'article:author',
-      content: 'https://see-algorithms.com/about',
+      property: "article:author",
+      content: "https://see-algorithms.com/about",
     },
   ],
   additionalLinkTags: [
     {
-      rel: 'icon',
-      href: '/favicon.png',
+      rel: "icon",
+      href: "/favicon.png",
     },
     {
-      rel: 'manifest',
-      href: '/manifest.json',
+      rel: "manifest",
+      href: "/manifest.json",
     },
   ],
 };
 
 export const metaConfigs = {
   BubbleSort: {
-    title: 'Bubble Sort Visualizer | Simple Sorting Algorithm',
+    title: "Bubble Sort Visualizer | Simple Sorting Algorithm",
     description:
-      'Visualize Bubble Sort with full control. Pause, step through swaps, and use your own numbers. Master this O(n²) algorithm with our interactive tool.',
+      "Visualize Bubble Sort with full control. Pause, step through swaps, and use your own numbers. Master this O(n²) algorithm with our interactive tool.",
   },
   QuickSort: {
-    title: 'Quick Sort Visualizer | Divide & Conquer Algorithm',
+    title: "Quick Sort Visualizer | Divide & Conquer Algorithm",
     description:
-      'Visualize Quick Sort step-by-step. Watch pivot partition strategy in real-time, use custom arrays, and understand O(n log n) sorting with an interactive tool.',
+      "Visualize Quick Sort step-by-step. Watch pivot partition strategy in real-time, use custom arrays, and understand O(n log n) sorting with an interactive tool.",
   },
   MergeSort: {
-    title: 'Merge Sort Visualizer | Stable Sort with Recursion',
+    title: "Merge Sort Visualizer | Stable Sort with Recursion",
     description:
-      'Interactive Merge Sort guide. Visualize the divide and conquer process step-by-step. Great for understanding recursion and stable O(n log n) sorting.',
+      "Interactive Merge Sort guide. Visualize the divide and conquer process step-by-step. Great for understanding recursion and stable O(n log n) sorting.",
   },
   InsertionSort: {
-    title: 'Insertion Sort Visualizer | Adaptive Sorting Algorithm',
+    title: "Insertion Sort Visualizer | Adaptive Sorting Algorithm",
     description:
-      'Watch Insertion Sort build a sorted array one item at a time. Perfect for understanding adaptive sorting on nearly sorted data. Interactive O(n²) guide.',
+      "Watch Insertion Sort build a sorted array one item at a time. Perfect for understanding adaptive sorting on nearly sorted data. Interactive O(n²) guide.",
   },
   SelectionSort: {
-    title: 'Selection Sort Visualizer | In-Place Comparison Sort',
+    title: "Selection Sort Visualizer | In-Place Comparison Sort",
     description:
-      'Visualize Selection Sort finding minimums. Simple, interactive animation to understand in-place comparison sorting and O(n²) complexity.',
+      "Visualize Selection Sort finding minimums. Simple, interactive animation to understand in-place comparison sorting and O(n²) complexity.",
   },
   HeapSort: {
-    title: 'Heap Sort Visualizer | Sorting with Binary Heap',
+    title: "Heap Sort Visualizer | Sorting with Binary Heap",
     description:
-      'Master Heap Sort. Visualize the heapify process and heap operations (extract-max) in real-time. Understand priority queues and O(n log n) sorting.',
+      "Master Heap Sort. Visualize the heapify process and heap operations (extract-max) in real-time. Understand priority queues and O(n log n) sorting.",
   },
   RadixSort: {
-    title: 'Radix Sort Visualizer | Digit-By-Digit Integer Sort',
+    title: "Radix Sort Visualizer | Digit-By-Digit Integer Sort",
     description:
-      'Visualize Radix Sort. See how numbers are sorted by digit buckets without comparison. Understand linear O(nk) time complexity with animations.',
+      "Visualize Radix Sort. See how numbers are sorted by digit buckets without comparison. Understand linear O(nk) time complexity with animations.",
   },
   BFS: {
-    title: 'Breadth-First Search Visualizer | Graph Traversal | BFS',
+    title: "Breadth-First Search Visualizer | Graph Traversal | BFS",
     description:
-      'Interactive BFS tool. Draw your own graphs and watch Breadth-First Search find the shortest path level-by-level. Perfect for graph theory students.',
+      "Interactive BFS tool. Draw your own graphs and watch Breadth-First Search find the shortest path level-by-level. Perfect for graph theory students.",
   },
   DFS: {
-    title: 'Depth-First Search Visualizer | Graph Traversal | DFS',
+    title: "Depth-First Search Visualizer | Graph Traversal | DFS",
     description:
-      'Visualize DFS exploring graphs. Draw custom graphs to see recursion and backtracking in action. Understand stack-based traversal and maze solving.',
+      "Visualize DFS exploring graphs. Draw custom graphs to see recursion and backtracking in action. Understand stack-based traversal and maze solving.",
   },
   TopSort: {
-    title: 'Topological Sort Visualizer | DAG Dependency Resolution',
+    title: "Topological Sort Visualizer | DAG Dependency Resolution",
     description:
-      'Visualize Topological Sorting on your own Directed Acyclic Graphs (DAGs). Understand dependency resolution and task scheduling algorithms.',
+      "Visualize Topological Sorting on your own Directed Acyclic Graphs (DAGs). Understand dependency resolution and task scheduling algorithms.",
   },
   Dijkstras: {
     title: "Dijkstra's Algorithm Visualizer | Shortest Path Finder",
@@ -119,129 +119,129 @@ export const metaConfigs = {
       "Visualize Borůvka's algorithm. Watch components merge in parallel to form a Minimum Spanning Tree. Advanced graph theory visualization.",
   },
   Hamiltonian: {
-    title: 'Hamiltonian Path Visualizer | Backtracking & NP-Complete',
+    title: "Hamiltonian Path Visualizer | Backtracking & NP-Complete",
     description:
-      'Visualize the Hamiltonian Path. Draw graphs and watch backtracking algorithms attempt to visit every node exactly once. Interactive graph tool.',
+      "Visualize the Hamiltonian Path. Draw graphs and watch backtracking algorithms attempt to visit every node exactly once. Interactive graph tool.",
   },
   LinkedList: {
-    title: 'Linked List Visualizer | Insert, Delete, Traverse',
+    title: "Linked List Visualizer | Insert, Delete, Traverse",
     description:
-      'Interactive Linked List guide. Insert, delete, and traverse nodes in real-time. Understand pointers and memory allocation visually.',
+      "Interactive Linked List guide. Insert, delete, and traverse nodes in real-time. Understand pointers and memory allocation visually.",
   },
   DoublyLinkedList: {
-    title: 'Doubly Linked List Visualizer | Forward and Backward Traversal',
+    title: "Doubly Linked List Visualizer | Forward and Backward Traversal",
     description:
-      'Visualize Doubly Linked List in real-time. Learn bidirectional traversal, node insertion, and deletion with interactive pointer animations.',
+      "Visualize Doubly Linked List in real-time. Learn bidirectional traversal, node insertion, and deletion with interactive pointer animations.",
   },
   CircularQueue: {
-    title: 'Circular Queue Visualizer | Ring Buffer FIFO Operations',
+    title: "Circular Queue Visualizer | Ring Buffer FIFO Operations",
     description:
-      'Visualize Circular Queue (Ring Buffer) mechanics. See how pointers wrap around in a fixed-size array. Ideal for understanding standard buffers.',
+      "Visualize Circular Queue (Ring Buffer) mechanics. See how pointers wrap around in a fixed-size array. Ideal for understanding standard buffers.",
   },
   BinaryHeap: {
-    title: 'Binary Heap Visualizer | Interactive Min/Max Heap',
+    title: "Binary Heap Visualizer | Interactive Min/Max Heap",
     description:
-      'Visualize Binary Heaps. Insert values and watch heapify-up/down operations maintain the heap property. Compare Min-Heap and Max-Heap behavior.',
+      "Visualize Binary Heaps. Insert values and watch heapify-up/down operations maintain the heap property. Compare Min-Heap and Max-Heap behavior.",
   },
   BST: {
-    title: 'Binary Search Tree Visualizer | Interactive BST Operations',
+    title: "Binary Search Tree Visualizer | Interactive BST Operations",
     description:
-      'Interactive BST tool. Insert, search, and delete nodes and visualize how the tree structure changes. Understand O(log n) vs O(n) search.',
+      "Interactive BST tool. Insert, search, and delete nodes and visualize how the tree structure changes. Understand O(log n) vs O(n) search.",
   },
   AVL: {
-    title: 'AVL Tree Visualizer | Self-Balancing Rotations | BST',
+    title: "AVL Tree Visualizer | Self-Balancing Rotations | BST",
     description:
-      'Watch AVL Trees balance themselves. Visualize LL, RR, LR, and RL rotations in real-time as you insert nodes. Master self-balancing logic.',
+      "Watch AVL Trees balance themselves. Visualize LL, RR, LR, and RL rotations in real-time as you insert nodes. Master self-balancing logic.",
   },
   RedBlackTree: {
-    title: 'Red-Black Tree Visualizer | Coloring & Rotations | BST',
+    title: "Red-Black Tree Visualizer | Coloring & Rotations | BST",
     description:
-      'Master Red-Black Trees. Insert nodes and watch the recoloring and rotation rules maintain balance. Understand O(log n) search.',
+      "Master Red-Black Trees. Insert nodes and watch the recoloring and rotation rules maintain balance. Understand O(log n) search.",
   },
   SplayTree: {
-    title: 'Splay Tree Visualizer | Self-Adjusting Binary Tree',
+    title: "Splay Tree Visualizer | Self-Adjusting Binary Tree",
     description:
-      'Visualize Splay Trees. Access nodes and watch them bubble to the root via splaying operations. Understand cache optimization and locality.',
+      "Visualize Splay Trees. Access nodes and watch them bubble to the root via splaying operations. Understand cache optimization and locality.",
   },
   BTree: {
-    title: 'B-Tree Visualizer | Multi-Way Search Tree',
+    title: "B-Tree Visualizer | Multi-Way Search Tree",
     description:
-      'Visualize B-Trees (order 3). Insert keys and watch nodes split and keys promote to maintain balance. Understand multi-way search trees.',
+      "Visualize B-Trees (order 3). Insert keys and watch nodes split and keys promote to maintain balance. Understand multi-way search trees.",
   },
   ConvexHull: {
-    title: 'Convex Hull Visualizer | Jarvis March Wrapping',
+    title: "Convex Hull Visualizer | Jarvis March Wrapping",
     description:
-      'Interactive tool for Convex Hull. Add points and watch Jarvis March algorithm wrap them in a hull step-by-step. Computational geometry guide.',
+      "Interactive tool for Convex Hull. Add points and watch Jarvis March algorithm wrap them in a hull step-by-step. Computational geometry guide.",
   },
   HuffmanCoding: {
-    title: 'Huffman Coding Visualizer | Data Compression Algorithm',
+    title: "Huffman Coding Visualizer | Data Compression Algorithm",
     description:
-      'Visualize Huffman Coding. Enter frequencies and watch the optimal prefix tree being built. Understand lossless compression step-by-step.',
+      "Visualize Huffman Coding. Enter frequencies and watch the optimal prefix tree being built. Understand lossless compression step-by-step.",
   },
-  'inplace-sorting': {
-    title: 'In-place Sorting Algorithms | Minimize Extra Space',
+  "inplace-sorting": {
+    title: "In-place Sorting Algorithms | Minimize Extra Space",
     description:
-      'Understand how in-place sorting algorithms minimize extra space while reorganizing data. Learn about the trade-offs and nuances.',
+      "Understand how in-place sorting algorithms minimize extra space while reorganizing data. Learn about the trade-offs and nuances.",
   },
-  'shortest-path-vs-mst': {
-    title: 'Shortest Path vs MST Algorithms | Difference in Objectives',
+  "shortest-path-vs-mst": {
+    title: "Shortest Path vs MST Algorithms | Difference in Objectives",
     description:
-      'Visualize the difference between Shortest Path and MST algorithms. Understand the objectives of these algorithms and how they are different.',
+      "Visualize the difference between Shortest Path and MST algorithms. Understand the objectives of these algorithms and how they are different.",
   },
-  'why-sorting-matters': {
-    title: 'Why Sorting is Important | Real-World Applications',
+  "why-sorting-matters": {
+    title: "Why Sorting is Important | Real-World Applications",
     description:
-      'Understand the importance of sorting algorithms and how they are used in real-world applications. Perfect for students and educators.',
+      "Understand the importance of sorting algorithms and how they are used in real-world applications. Perfect for students and educators.",
   },
-  'stable-sorting': {
-    title: 'Stable Sorting Algorithms | Maintaining Original Order',
+  "stable-sorting": {
+    title: "Stable Sorting Algorithms | Maintaining Original Order",
     description:
-      'Learn how algorithms maintain original order when sorting data with duplicate keys. Understand the importance of stability in sorting algorithms.',
+      "Learn how algorithms maintain original order when sorting data with duplicate keys. Understand the importance of stability in sorting algorithms.",
   },
-  'quick-sort-illusion': {
-    title: 'When Quicksort Slows Down | Pivot Selection | Sorting',
+  "quick-sort-illusion": {
+    title: "When Quicksort Slows Down | Pivot Selection | Sorting",
     description:
-      'Learn how already sorted data can slow down Quicksort. Understand the importance of pivot selection and how it affects the performance.',
+      "Learn how already sorted data can slow down Quicksort. Understand the importance of pivot selection and how it affects the performance.",
   },
-  'avl-tree-vs-red-black': {
-    title: 'AVL Tree vs Red-Black Tree | Self-Balancing Trees',
+  "avl-tree-vs-red-black": {
+    title: "AVL Tree vs Red-Black Tree | Self-Balancing Trees",
     description:
-      'Learn the difference between AVL Trees and Red-Black Trees. Understand the self-balancing mechanisms and how they differ in practice.',
+      "Learn the difference between AVL Trees and Red-Black Trees. Understand the self-balancing mechanisms and how they differ in practice.",
   },
-  'deleting-bst-node': {
-    title: 'Deleting a Node in BST | Three Possible Cases',
+  "deleting-bst-node": {
+    title: "Deleting a Node in BST | Three Possible Cases",
     description:
-      'Learn how a Binary Search Tree removes nodes while maintaining its ordering. Explore the three situations that arise and how each case works.',
+      "Learn how a Binary Search Tree removes nodes while maintaining its ordering. Explore the three situations that arise and how each case works.",
   },
-  'compare-sorting': {
-    title: 'Compare Sorting Algorithms | Real-Time Visualization',
+  "compare-sorting": {
+    title: "Compare Sorting Algorithms | Real-Time Visualization",
     description:
-      'Compare multiple sorting algorithms in real-time. Watch how different approaches sort the same list of numbers simultaneously.',
+      "Compare multiple sorting algorithms in real-time. Watch how different approaches sort the same list of numbers simultaneously.",
   },
-  'embed-sorting': {
-    title: 'Embed Sorting Visualizers | Educational Tool',
+  "embed-sorting": {
+    title: "Embed Sorting Visualizers | Educational Tool",
     description:
-      'Learn how to embed interactive sorting animations into your blog, Notion, or website. Perfect for technical articles and tutorials.',
+      "Learn how to embed interactive sorting animations into your blog, Notion, or website. Perfect for technical articles and tutorials.",
   },
-  'embed-graph': {
-    title: 'Embed Graph Visualizers | Interactive Pathfinding',
+  "embed-graph": {
+    title: "Embed Graph Visualizers | Interactive Pathfinding",
     description:
-      'Transform your graph theory articles with interactive visualizers. Learn how to embed dynamic animations into your blog, Notion, or website.',
+      "Transform your graph theory articles with interactive visualizers. Learn how to embed dynamic animations into your blog, Notion, or website.",
   },
-  'embed-data-struct': {
-    title: 'Embed DS Visualizers | Interactive Tree Visuals',
+  "embed-data-struct": {
+    title: "Embed DS Visualizers | Interactive Tree Visuals",
     description:
-      'Learn how to embed interactive data structure animations into your blog, Notion, or website. Perfect for technical articles and tutorials.',
+      "Learn how to embed interactive data structure animations into your blog, Notion, or website. Perfect for technical articles and tutorials.",
   },
-  'bfs-vs-dfs': {
-    title: 'Compare BFS and DFS | Graph Traversal Algorithms',
+  "bfs-vs-dfs": {
+    title: "Compare BFS and DFS | Graph Traversal Algorithms",
     description:
-      'Visualize Breadth-First Search and Depth-First Search side-by-side. Explore their diverging patterns and search strategies with an interactive tool.',
+      "Visualize Breadth-First Search and Depth-First Search side-by-side. Explore their diverging patterns and search strategies with an interactive tool.",
   },
-  'avl-tree-vs-rbt': {
-    title: 'AVL Tree vs Red-Black Tree | Self-Balancing Trees',
+  "avl-tree-vs-rbt": {
+    title: "AVL Tree vs Red-Black Tree | Self-Balancing Trees",
     description:
-      'Compare the trade-offs between AVL Tree and Red-Black Tree. Watch how each structure rebalances itself during insertions in real-time.',
+      "Compare the trade-offs between AVL Tree and Red-Black Tree. Watch how each structure rebalances itself during insertions in real-time.",
   },
 };
 
@@ -249,11 +249,11 @@ export const getSeoConfig = (pageId, pathname) => {
   const config = metaConfigs[pageId];
 
   if (!config) {
-    if (pathname === '/articles') {
+    if (pathname === "/articles") {
       return {
-        title: 'Articles (See Algorithms) | Deep-dive into DSA',
+        title: "Articles (See Algorithms) | Deep-dive into DSA",
         description:
-          'Learn about sorting efficiency, self-balancing trees, graph theory, and more through interactive articles and visual guides.',
+          "Learn about sorting efficiency, self-balancing trees, graph theory, and more through interactive articles and visual guides.",
       };
     }
     return defaultSeoConfig;

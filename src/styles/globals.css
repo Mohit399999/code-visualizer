@@ -2,7 +2,11 @@ html,
 body,
 #__next {
   height: 100%;
-  font-family: 'Nunito', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  color: #1d1d1f;
+  -webkit-font-smoothing: antialiased;
 }
 
 .d-flex {
@@ -11,20 +15,60 @@ body,
 
 .MuiTypography-h4 {
   font-size: 1.9rem;
+  letter-spacing: -0.015em;
 }
 
 .MuiTypography-h5 {
   font-size: 1.4rem;
+  letter-spacing: -0.01em;
 }
 
 a {
-  color: #1565c0;
+  color: #0071e3;
 }
 
 code {
   font-size: 0.95rem;
-  background-color: #dff4ff;
-  border-radius: 4px;
+  background-color: #f5f5f7;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
   padding: 2px 6px;
   white-space: nowrap;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatBlob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(4%, -6%) scale(1.08);
+  }
+  66% {
+    transform: translate(-3%, 4%) scale(0.96);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.fadeInUp {
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }

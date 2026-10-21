@@ -5,24 +5,31 @@ import {
   IconButton,
   Button,
   Box,
-} from '@mui/material';
+} from "@mui/material";
 import {
   MenuOpen,
   Info,
   MoreVert,
   AccountBalanceWallet,
   Article,
-} from '@mui/icons-material';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import UserAuth from './user-auth';
-import Image from 'next/image';
-import styles from '@/styles/header.module.css';
+} from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import UserAuth from "./user-auth";
+import Image from "next/image";
+import styles from "@/styles/header.module.css";
 
 function Header(props) {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const openMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -37,12 +44,15 @@ function Header(props) {
     closeMenu();
   };
 
-  const mdBlock = { xs: 'none', md: 'block' };
-  const mdFlex = { xs: 'none', md: 'flex' };
-  const mdNone = { md: 'none' };
+  const mdBlock = { xs: "none", md: "block" };
+  const mdFlex = { xs: "none", md: "flex" };
+  const mdNone = { md: "none" };
 
   return (
-    <Box display="flex" className={styles.header}>
+    <Box
+      display="flex"
+      className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}
+    >
       <Box display="flex" alignItems="center">
         <MenuOpen
           onClick={() => props.toggleMenu()}
@@ -58,14 +68,14 @@ function Header(props) {
             width="200"
             height="40"
             className={styles.logo}
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
           />
         </Box>
         <Typography
           variant="button"
           fontWeight={600}
           className={styles.heading}
-          onClick={() => router.push('/')}
+          onClick={() => router.push("/")}
           sx={{ display: mdNone }}
         >
           SEE ALGORITHMS
@@ -73,16 +83,16 @@ function Header(props) {
       </Box>
 
       {/* Desktop Navigation */}
-      <Box sx={{ display: mdFlex, alignItems: 'center' }}>
+      <Box sx={{ display: mdFlex, alignItems: "center" }}>
         <Button
-          onClick={() => navigate('/articles')}
+          onClick={() => navigate("/articles")}
           startIcon={<Article />}
           className={styles.navButton}
         >
           Articles
         </Button>
         <Button
-          onClick={() => navigate('/about')}
+          onClick={() => navigate("/about")}
           startIcon={<Info />}
           className={styles.navButton}
         >
@@ -92,16 +102,16 @@ function Header(props) {
       </Box>
 
       {/* Mobile Navigation */}
-      <Box sx={{ display: { md: 'none' } }}>
+      <Box sx={{ display: { md: "none" } }}>
         <IconButton
           id="info-button"
           onClick={openMenu}
           size="small"
-          aria-controls={open ? 'info-menu' : undefined}
+          aria-controls={open ? "info-menu" : undefined}
           aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
+          aria-expanded={open ? "true" : undefined}
         >
-          <MoreVert sx={{ color: 'white' }} />
+          <MoreVert sx={{ color: "white" }} />
         </IconButton>
         <Menu
           id="info-menu"
@@ -109,20 +119,18 @@ function Header(props) {
           open={open}
           onClose={closeMenu}
           MenuListProps={{
-            'aria-labelledby': 'info-button',
+            "aria-labelledby": "info-button",
           }}
         >
-          <MenuItem onClick={() => navigate('/buy-credits')}>
+          <MenuItem onClick={() => navigate("/buy-credits")}>
             <AccountBalanceWallet sx={{ mr: 1 }} fontSize="small" />
-            <Typography>
-              AI Credits
-            </Typography>
+            <Typography>AI Credits</Typography>
           </MenuItem>
-          <MenuItem onClick={() => navigate('/articles')}>
+          <MenuItem onClick={() => navigate("/articles")}>
             <Article sx={{ mr: 1 }} fontSize="small" />
             Articles
           </MenuItem>
-          <MenuItem onClick={() => navigate('/about')}>
+          <MenuItem onClick={() => navigate("/about")}>
             <Info sx={{ mr: 1 }} fontSize="small" />
             About Us
           </MenuItem>

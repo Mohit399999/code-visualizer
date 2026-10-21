@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import {
   Accordion,
   AccordionDetails,
@@ -7,21 +7,21 @@ import {
   ListItemButton,
   List,
   Typography,
-} from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
-import { algorithms, categories } from '@/common/appData';
-import styles from '@/styles/sider.module.css';
-import Link from 'next/link';
+} from "@mui/material";
+import { ExpandMore } from "@mui/icons-material";
+import { algorithms, categories } from "@/common/appData";
+import styles from "@/styles/sider.module.css";
+import Link from "next/link";
 
 function Sider({ selected }) {
-  const [expanded, setExpanded] = useState('Sorting');
+  const [expanded, setExpanded] = useState("Sorting");
   const { query } = useRouter();
 
-  const algo = algorithms.findObj('id', selected) || {};
-  const { category = query.category || '' } = algo;
+  const algo = algorithms.findObj("id", selected) || {};
+  const { category = query.category || "" } = algo;
 
   const getPathname = (_cat, algoId) => {
-    const catId = _cat.split(' ').join('-').toLowerCase();
+    const catId = _cat.split(" ").join("-").toLowerCase();
     return `/${catId}/${algoId}`;
   };
 
@@ -31,72 +31,77 @@ function Sider({ selected }) {
 
   return (
     <div className={styles.sider}>
-      {Object.keys(categories).map((category) => {
-        const isExpanded = category === expanded;
-        return (
-          <div key={category} className={styles.accordion}>
-            <Accordion
-              expanded={isExpanded}
-              onChange={() =>
-                isExpanded ? setExpanded('') : setExpanded(category)
-              }
-              disableGutters
-              elevation={0}
-              sx={{
-                boxShadow: 'none',
-                background: 'transparent',
-                '&:before': { display: 'none' },
-              }}
-            >
-              <AccordionSummary
-                expandIcon={
-                  <ExpandMore
-                    className={`${styles.expandIcon} ${
-                      isExpanded ? styles.expandIconExpanded : ''
-                    }`}
-                  />
+      {Object.keys(categories)
+        .filter((category) => category !== "Other")
+        .map((category) => {
+          const isExpanded = category === expanded;
+          return (
+            <div key={category} className={styles.accordion}>
+              <Accordion
+                expanded={isExpanded}
+                onChange={() =>
+                  isExpanded ? setExpanded("") : setExpanded(category)
                 }
-                className={styles.category}
+                disableGutters
+                elevation={0}
                 sx={{
-                  '& .MuiAccordionSummary-content': {
-                    margin: 0,
-                  },
+                  boxShadow: "none",
+                  background: "transparent",
+                  "&:before": { display: "none" },
                 }}
               >
-                <Typography variant="subtitle1" className={styles.categoryText}>
-                  {category.toUpperCase()}
-                </Typography>
-              </AccordionSummary>
+                <AccordionSummary
+                  expandIcon={
+                    <ExpandMore
+                      className={`${styles.expandIcon} ${
+                        isExpanded ? styles.expandIconExpanded : ""
+                      }`}
+                    />
+                  }
+                  className={styles.category}
+                  sx={{
+                    "& .MuiAccordionSummary-content": {
+                      margin: 0,
+                    },
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    className={styles.categoryText}
+                  >
+                    {category.toUpperCase()}
+                  </Typography>
+                </AccordionSummary>
 
-              <AccordionDetails className={styles.accordionDetails}>
-                <List className={styles.algorithmList}>
-                  {categories[category].map(({ id, name }) => {
-                    const isSelected = id === selected;
-                    return (
-                      <ListItemButton
-                        key={id}
-                        component={Link}
-                        href={getPathname(category, id)}
-                        className={`${styles.listItem} ${
-                          isSelected ? styles.listItemSelected : ''
-                        }`}
-                        disableRipple
-                      >
-                        <Typography
-                          variant="subtitle1"
-                          className={styles.algorithmText}
+                <AccordionDetails className={styles.accordionDetails}>
+                  <List className={styles.algorithmList}>
+                    {categories[category].map(({ id, name }) => {
+                      const isSelected = id === selected;
+                      return (
+                        <ListItemButton
+                          key={id}
+                          component={Link}
+                          href={getPathname(category, id)}
+                          className={`${styles.listItem} ${
+                            isSelected ? styles.listItemSelected : ""
+                          }`}
+                          disableRipple
                         >
-                          {name}
-                        </Typography>
-                      </ListItemButton>
-                    );
-                  })}
-                </List>
-              </AccordionDetails>
-            </Accordion>
-          </div>
-        );
-      })}
+                          <Typography
+                            variant="subtitle1"
+                            className={styles.algorithmText}
+                          >
+                            {name}
+                          </Typography>
+                        </ListItemButton>
+                      );
+                    })}
+                  </List>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          );
+        })}
     </div>
   );
 }
